@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::Base;
+use lib 't/lib';
 plan tests => 25*2;
 
 use Plack::Builder;
@@ -26,7 +27,9 @@ run {
     my %args;
     my $code = sub {
         my $error = shift;
+
         my $handler = builder {
+            enable 'Plack::Middleware::MangleEnv', %args;
             enable 'Plack::Middleware::ReverseProxy';
             sub {
                 my $req = Plack::Request->new(shift);
@@ -58,7 +61,6 @@ run {
                 my $res = $cb->(
                     HTTP::Request->new(
                         GET => 'http://example.com/?foo=bar', $headers,
-                        %args,
                     )
                 );
             },
@@ -79,6 +81,7 @@ run {
 __END__
 
 === with https
+--- ONLY
 --- input
 x-forwarded-https: on
 --- url_scheme: https
