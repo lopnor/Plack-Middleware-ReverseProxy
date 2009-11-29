@@ -3,11 +3,11 @@ use strict;
 use warnings;
 use parent 'Plack::Middleware';
 
-__PACKAGE__->mk_accessors(qw(address));
+__PACKAGE__->mk_accessors(qw(https ));
 
 sub call {
     my ($self, $env) = @_;
-    $env->{REMOTE_ADDR} = $self->address;
+    $env->{HTTPS} = $self->https if $self->https;
     $self->app->($env);
 }
 

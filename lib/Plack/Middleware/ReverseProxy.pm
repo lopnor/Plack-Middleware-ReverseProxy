@@ -26,11 +26,12 @@ sub call {
     if ( $env->{HTTP_X_FORWARDED_HOST} ) {
         my $host = $env->{HTTP_X_FORWARDED_HOST};
         if ( $host =~ /^(.+):(\d+)$/ ) {
-            $host = $1;
+#            $host = $1;
             $env->{SERVER_PORT} = $2;
         } elsif ( $env->{HTTP_X_FORWARDED_PORT} ) {
             # in apache httpd.conf (RequestHeader set X-Forwarded-Port 8443)
             $env->{SERVER_PORT} = $env->{HTTP_X_FORWARDED_PORT};
+            $host .= ":$env->{SERVER_PORT}";
         } else {
             $env->{SERVER_PORT} = $default_port;
         }

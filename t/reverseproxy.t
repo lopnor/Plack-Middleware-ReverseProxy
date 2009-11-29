@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 25*2;
+plan tests => 25;
 
 use Plack::Builder;
 use Plack::Test;
@@ -14,12 +14,12 @@ filters { input => [qw/yaml/] };
 
 run {
     my $block = shift;
-    local %ENV = ();
-    $ENV{REQUEST_METHOD} = 'GET';
-    $ENV{SERVER_PORT}    = 80;
-    $ENV{HTTP_HOST}      = 'example.com';
-    $ENV{QUERY_STRING}   = 'foo=bar';
-    $ENV{HTTPS}          = delete $block->input->{https} if $block->input->{https};
+#    local %ENV = ();
+#    $ENV{REQUEST_METHOD} = 'GET';
+#    $ENV{SERVER_PORT}    = 80;
+#    $ENV{HTTP_HOST}      = 'example.com';
+#    $ENV{QUERY_STRING}   = 'foo=bar';
+#    $ENV{HTTPS}          = delete $block->input->{https} if $block->input->{https};
 
     my $headers = HTTP::Headers->new;
     $headers->header( %{ $block->input } );
@@ -29,16 +29,25 @@ run {
         my $error = shift;
 
         my $handler = builder {
-            enable 'Plack::Middleware::MangleEnv', %args;
+            enable 'Plack::Middleware::MangleEnv', %{$block->input};
             enable 'Plack::Middleware::ReverseProxy';
             sub {
                 my $req = Plack::Request->new(shift);
-                for my $attr (qw/url_scheme address/) {
+                for my $attr (qw/ address/) {
                     if ( $block->$attr ) {
                         if ($error && $block->is_secure_error) {
                             isnt( $req->$attr, $block->$attr, $block->name . " of $attr isnt" );
                         } else {
                             is( $req->$attr, $block->$attr, $block->name . " of $attr" );
+                        }
+                    }
+                }
+                for my $attr (qw/secure/) {
+                    if ( $block->$attr ) {
+                        if ($error && $block->is_secure_error) {
+                            isnt( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr isnt" );
+                        } else {
+                            is( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr" );
                         }
                     }
                 }
@@ -71,20 +80,15 @@ run {
     };
 
     # allow host
-    $args{address} = $ENV{REMOTE_ADDR} = $block->allow_host || '127.0.0.1';
     $code->();
-    # deny host
-    $args{address} = $ENV{REMOTE_ADDR} = $block->deny_host || '0.0.0.0';
-    $code->(1);
 };
 
 __END__
 
 === with https
---- ONLY
 --- input
 x-forwarded-https: on
---- url_scheme: https
+--- secure: 1
 --- base: https://example.com:80/
 --- uri:  https://example.com:80/?foo=bar
 --- deny_host: 10.0.0.1
@@ -94,7 +98,7 @@ x-forwarded-https: on
 === without https
 --- input
 x-forwarded-https: off
---- url_scheme: http
+--- secure: 0
 --- base: http://example.com/
 --- uri:  http://example.com/?foo=bar
 --- allowed_remote: 192.168.0.1
@@ -105,7 +109,7 @@ x-forwarded-https: off
 ===
 --- input
 dummy: 1
---- url_scheme: http
+--- secure: 0
 --- base: http://example.com/
 --- uri: http://example.com/?foo=bar
 --- allowed_remote: 192.168.0.\d+
