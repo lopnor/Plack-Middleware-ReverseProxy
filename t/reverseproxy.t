@@ -14,12 +14,6 @@ filters { input => [qw/yaml/] };
 
 run {
     my $block = shift;
-#    local %ENV = ();
-#    $ENV{REQUEST_METHOD} = 'GET';
-#    $ENV{SERVER_PORT}    = 80;
-#    $ENV{HTTP_HOST}      = 'example.com';
-#    $ENV{QUERY_STRING}   = 'foo=bar';
-#    $ENV{HTTPS}          = delete $block->input->{https} if $block->input->{https};
 
     my $headers = HTTP::Headers->new;
     $headers->header( %{ $block->input } );
@@ -79,7 +73,6 @@ run {
         test_psgi %test;
     };
 
-    # allow host
     $code->();
 };
 
