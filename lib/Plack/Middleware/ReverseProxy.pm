@@ -39,7 +39,7 @@ sub call {
     } elsif ( $env->{HTTP_HOST} ) {
         my $host = $env->{HTTP_HOST};
         if ($host =~ /^(.+):(\d+)$/ ) {
-            $env->{HTTP_HOST}   = $1;
+#            $env->{HTTP_HOST}   = $1;
             $env->{SERVER_PORT} = $2;
         } elsif ($host =~ /^(.+)$/ ) {
             $env->{HTTP_HOST}   = $1;
