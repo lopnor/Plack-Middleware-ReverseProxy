@@ -18,62 +18,43 @@ run {
     my $headers = HTTP::Headers->new;
     $headers->header( %{ $block->input } );
 
-    my %args;
-    my $code = sub {
-        my $error = shift;
-
-        my $handler = builder {
-            enable 'Plack::Middleware::MangleEnv', %{$block->input};
-            enable 'Plack::Middleware::ReverseProxy';
-            sub {
-                my $req = Plack::Request->new(shift);
-                for my $attr (qw/ address/) {
-                    if ( $block->$attr ) {
-                        if ($error && $block->is_secure_error) {
-                            isnt( $req->$attr, $block->$attr, $block->name . " of $attr isnt" );
-                        } else {
-                            is( $req->$attr, $block->$attr, $block->name . " of $attr" );
-                        }
-                    }
+    my $handler = builder {
+        enable 'Plack::Middleware::MangleEnv', %{$block->input};
+        enable 'Plack::Middleware::ReverseProxy';
+        sub {
+            my $req = Plack::Request->new(shift);
+            for my $attr (qw/ address/) {
+                if ( $block->$attr ) {
+                    is( $req->$attr, $block->$attr, $block->name . " of $attr" );
                 }
-                for my $attr (qw/secure/) {
-                    if ( $block->$attr ) {
-                        if ($error && $block->is_secure_error) {
-                            isnt( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr isnt" );
-                        } else {
-                            is( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr" );
-                        }
-                    }
-                }
-                for my $url (qw/uri base /) {
-                    if ( $block->$url ) {
-                        if ($error && $block->is_url_error) {
-                            isnt( $req->$url->as_string, $block->$url, $block->name . " of $url isnt" );
-                        } else {
-                            is( $req->$url->as_string, $block->$url, $block->name . " of $url" );
-                        }
-                    }
-                }
-                [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
             }
-        };
-
-        my %test = (
-            client => sub {
-                my $cb = shift;
-                my $res = $cb->(
-                    HTTP::Request->new(
-                        GET => 'http://example.com/?foo=bar', $headers,
-                    )
-                );
-            },
-            app => $handler,
-        );
-
-        test_psgi %test;
+            for my $attr (qw/secure/) {
+                if ( $block->$attr ) {
+                    is( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr" );
+                }
+            }
+            for my $url (qw/uri base /) {
+                if ( $block->$url ) {
+                    is( $req->$url->as_string, $block->$url, $block->name . " of $url" );
+                }
+            }
+            [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
+        }
     };
 
-    $code->();
+    my %test = (
+        client => sub {
+            my $cb = shift;
+            my $res = $cb->(
+                HTTP::Request->new(
+                    GET => 'http://example.com/?foo=bar', $headers,
+                )
+            );
+        },
+        app => $handler,
+    );
+
+    test_psgi %test;
 };
 
 __END__

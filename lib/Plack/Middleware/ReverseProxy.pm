@@ -2,7 +2,6 @@ package Plack::Middleware::ReverseProxy;
 
 use strict;
 use warnings;
-use Carp;
 use parent qw(Plack::Middleware);
 
 sub call {
@@ -51,6 +50,48 @@ sub call {
     $self->app->($env);
 }
 
-
 1;
 
+__END__
+
+=head1 NAME
+
+Plack::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
+
+=head1 SYNOPSIS
+
+  use "Plack::Middleware::ReverseProxy";
+
+  builder {
+      enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 
+          "Plack::Middleware::ReverseProxy"
+      $app;
+  };
+
+=head1 DESCRIPTION
+
+Plack::Middleware::ReverseProxy resets some HTTP headers, which changed by
+reverse-proxy. You can specify the reverse proxy address and stop fake requests
+using 'enable_if' directive in your app.psgi.
+
+=head1 LICENSE
+
+This software is licensed under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Nobuo Danjou
+
+Masahiro Nagano
+
+Tatsuhiko Miyagawa
+
+=head1 SEE ALSO
+
+L<HTTP::Engine::Middleware::ReverseProxy> 
+
+L<Plack::Middleware>
+
+L<Plack::Middleware::Conditional>
+
+=cut

@@ -5,6 +5,11 @@ add_stopwords(map { split /[\s\:\-]/ } <DATA>);
 $ENV{LANG} = 'C';
 all_pod_files_spelling_ok('lib');
 __DATA__
-Noubo Danjou
+Nobuo Danjou 
+Masahiro Nagano
+Tatsuhiko Miyagawa
 nobuo.danjou@gmail.com
 Plack::Middleware::ReverseProxy
+app
+psgi
+backend
