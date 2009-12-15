@@ -23,7 +23,7 @@ sub call {
     }
 
     if ( $env->{HTTP_X_FORWARDED_HOST} ) {
-        my $host = $env->{HTTP_X_FORWARDED_HOST};
+        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /^([^,\s]+)/;
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;
