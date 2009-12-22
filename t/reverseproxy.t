@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 25;
+plan tests => 30;
 
 use Plack::Builder;
 use Plack::Test;
@@ -128,3 +128,16 @@ x-forwarded-host: 192.168.1.5
 x-forwarded-port: 1984
 --- base: http://192.168.1.5:1984/
 --- uri:  http://192.168.1.5:1984/?foo=bar
+=== with multiple HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_FOR
+--- input
+x-forwarded-host: outmost.proxy.example.com, middle.proxy.example.com
+x-forwarded-for: 1.2.3.4, 192.168.1.6
+host: 192.168.1.7:5000
+--- address: 192.168.1.6
+--- base: http://outmost.proxy.example.com/
+--- uri:  http://outmost.proxy.example.com/?foo=bar
+=== normal plackup status
+--- input
+host: 127.0.0.1:5000
+--- base: http://127.0.0.1:5000/
+--- uri:  http://127.0.0.1:5000/?foo=bar
