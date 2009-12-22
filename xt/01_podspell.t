@@ -8,8 +8,10 @@ __DATA__
 Nobuo Danjou 
 Masahiro Nagano
 Tatsuhiko Miyagawa
+Kazuhiro Osawa
 nobuo.danjou@gmail.com
 Plack::Middleware::ReverseProxy
 app
 psgi
 backend
+

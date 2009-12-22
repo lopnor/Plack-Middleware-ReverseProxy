@@ -23,15 +23,11 @@ run {
         enable 'Plack::Middleware::ReverseProxy';
         sub {
             my $req = Plack::Request->new(shift);
-            for my $attr (qw/ address/) {
-                if ( $block->$attr ) {
-                    is( $req->$attr, $block->$attr, $block->name . " of $attr" );
-                }
+            if ( $block->address ) {
+                is( $req->address, $block->address, $block->name . " of address" );
             }
-            for my $attr (qw/secure/) {
-                if ( $block->$attr ) {
-                    is( ($req->url_scheme eq 'https'), $block->$attr, $block->name . " of $attr" );
-                }
+            if ( $block->secure ) {
+                is( ($req->url_scheme eq 'https'), $block->secure, $block->name . " of secure" );
             }
             for my $url (qw/uri base /) {
                 if ( $block->$url ) {
@@ -65,9 +61,6 @@ x-forwarded-https: on
 --- secure: 1
 --- base: https://example.com:80/
 --- uri:  https://example.com:80/?foo=bar
---- deny_host: 10.0.0.1
---- is_secure_error: 1
---- is_url_error: 1
 
 === without https
 --- input
@@ -75,10 +68,6 @@ x-forwarded-https: off
 --- secure: 0
 --- base: http://example.com/
 --- uri:  http://example.com/?foo=bar
---- allowed_remote: 192.168.0.1
---- allow_host: 192.168.0.1
---- deny_host: 10.0.0.1
---- is_secure_error: 1
 
 ===
 --- input
@@ -86,9 +75,6 @@ dummy: 1
 --- secure: 0
 --- base: http://example.com/
 --- uri: http://example.com/?foo=bar
---- allowed_remote: 192.168.0.\d+
---- allow_host: 192.168.0.99
---- deny_host: 10.0.0.1
 
 === https with HTTP_X_FORWARDED_PROTO
 --- input
@@ -96,11 +82,6 @@ x-forwarded-proto: https
 --- secure: 1
 --- base: https://example.com:80/
 --- uri:  https://example.com:80/?foo=bar
---- allowed_remote: 192.168.0.\d
---- allow_host: 192.168.0.1
---- deny_host: 192.168.0.11
---- is_secure_error: 1
---- is_url_error: 1
 
 === with HTTP_X_FORWARDED_FOR
 --- input
@@ -108,21 +89,18 @@ x-forwarded-for: 192.168.3.2
 --- address: 192.168.3.2
 --- base: http://example.com/
 --- uri:  http://example.com/?foo=bar
---- is_secure_error: 1
 
 === with HTTP_X_FORWARDED_HOST
 --- input
 x-forwarded-host: 192.168.1.2:5235
 --- base: http://192.168.1.2:5235/
 --- uri:  http://192.168.1.2:5235/?foo=bar
---- is_url_error: 1
 
 === default port with HTTP_X_FORWARDED_HOST
 --- input
 x-forwarded-host: 192.168.1.2
 --- base: http://192.168.1.2/
 --- uri:  http://192.168.1.2/?foo=bar
---- is_url_error: 1
 
 === default https port with HTTP_X_FORWARDED_HOST
 --- input
@@ -130,15 +108,12 @@ x-forwarded-https: on
 x-forwarded-host: 192.168.1.2
 --- base: https://192.168.1.2/
 --- uri:  https://192.168.1.2/?foo=bar
---- is_secure_error: 1
---- is_url_error: 1
 
 === default port with HOST
 --- input
 host: 192.168.1.2
 --- base: http://192.168.1.2/
 --- uri:  http://192.168.1.2/?foo=bar
---- is_url_error: 1
 
 === default https port with HOST
 --- input
@@ -146,8 +121,6 @@ host: 192.168.1.2
 https: ON
 --- base: https://192.168.1.2/
 --- uri:  https://192.168.1.2/?foo=bar
---- is_secure_error: 1
---- is_url_error: 1
 
 === with HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_PORT
 --- input
@@ -155,4 +128,3 @@ x-forwarded-host: 192.168.1.5
 x-forwarded-port: 1984
 --- base: http://192.168.1.5:1984/
 --- uri:  http://192.168.1.5:1984/?foo=bar
---- is_url_error: 1
