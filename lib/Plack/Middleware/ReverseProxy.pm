@@ -3,7 +3,7 @@ package Plack::Middleware::ReverseProxy;
 use strict;
 use warnings;
 use parent qw(Plack::Middleware);
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub call {
     my $self = shift;
@@ -24,7 +24,7 @@ sub call {
     }
 
     if ( $env->{HTTP_X_FORWARDED_HOST} ) {
-        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /^([^,\s]+)/;
+        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /([^,\s]+)$/;
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;

@@ -134,8 +134,8 @@ x-forwarded-host: outmost.proxy.example.com, middle.proxy.example.com
 x-forwarded-for: 1.2.3.4, 192.168.1.6
 host: 192.168.1.7:5000
 --- address: 192.168.1.6
---- base: http://outmost.proxy.example.com/
---- uri:  http://outmost.proxy.example.com/?foo=bar
+--- base: http://middle.proxy.example.com/
+--- uri:  http://middle.proxy.example.com/?foo=bar
 === normal plackup status
 --- input
 host: 127.0.0.1:5000
