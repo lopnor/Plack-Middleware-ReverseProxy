@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.03    Tue Dec 22 17:05:00 2009
+        - fix build_requires
+
 0.02    Tue Dec 22 15:30:00 2009
         - use the last item of x-forwarded-host as host
 
