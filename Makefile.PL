@@ -3,7 +3,8 @@ name 'Plack-Middleware-ReverseProxy';
 all_from 'lib/Plack/Middleware/ReverseProxy.pm';
 
 # requires '';
-requires 'Plack';
+requires 'parent';
+requires 'Plack::Middleware';
 
 tests 't/*.t';
 author_tests 'xt';
