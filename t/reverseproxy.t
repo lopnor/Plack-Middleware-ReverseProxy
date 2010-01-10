@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 30;
+plan tests => 31;
 
 use Plack::Builder;
 use Plack::Test;
@@ -141,3 +141,9 @@ host: 192.168.1.7:5000
 host: 127.0.0.1:5000
 --- base: http://127.0.0.1:5000/
 --- uri:  http://127.0.0.1:5000/?foo=bar
+
+=== HTTP_X_FORWARDED_PORT to secure port
+--- input
+x-forwarded-host: 192.168.1.2
+x-forwarded-port: 443
+--- secure: 1
