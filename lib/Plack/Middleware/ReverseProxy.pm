@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use 5.008_001;
 use parent qw(Plack::Middleware);
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub call {
     my $self = shift;

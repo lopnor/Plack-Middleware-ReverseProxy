@@ -1,5 +1,10 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.05    Fri Jan 29 17:35:00 2010
+        - use psgi.url_scheme, to be forward compatible with Plack 1.0 change,
+        and be explicit about the env key anyway.
+        (t/reverseproxy.t by miyagawa)
+
 0.04    Wed Jan 13 16:53:20 2010
 
         - Tell the environment the request is secure if it was forwarded for a 
