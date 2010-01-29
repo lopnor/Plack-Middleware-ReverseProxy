@@ -27,7 +27,7 @@ run {
                 is( $req->address, $block->address, $block->name . " of address" );
             }
             if ( $block->secure ) {
-                is( ($req->url_scheme eq 'https'), $block->secure, $block->name . " of secure" );
+                is( ($req->env->{'psgi.url_scheme'} eq 'https'), $block->secure, $block->name . " of secure" );
             }
             for my $url (qw/uri base /) {
                 if ( $block->$url ) {
