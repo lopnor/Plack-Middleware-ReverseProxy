@@ -66,7 +66,7 @@ Plack::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
 
   builder {
       enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 
-          "Plack::Middleware::ReverseProxy"
+          "Plack::Middleware::ReverseProxy";
       $app;
   };
 
