@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.06    Wed Feb 17 12:52:30 2010
+        - Fix pod (yusukebe)
+
 0.05    Fri Jan 29 17:35:00 2010
         - use psgi.url_scheme, to be forward compatible with Plack 1.0 change,
         and be explicit about the env key anyway.
