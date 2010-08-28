@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.07    Sat Aug 28 09:40:00 2010
+        - Fix dependencies
+
 0.06    Wed Feb 17 12:52:30 2010
         - Fix pod (yusukebe)
 
