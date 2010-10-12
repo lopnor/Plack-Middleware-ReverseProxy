@@ -51,6 +51,9 @@ sub call {
         }
     }
 
+    $env->{SCRIPT_NAME} = $env->{HTTP_X_FORWARDED_SCRIPT_NAME}
+        if $env->{HTTP_X_FORWARDED_SCRIPT_NAME};
+
     $self->app->($env);
 }
 
