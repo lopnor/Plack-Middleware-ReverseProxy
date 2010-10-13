@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 35;
+plan tests => 24;
 
 use Plack::Builder;
 use Plack::Test;
@@ -20,7 +20,12 @@ run {
 
     my $handler = builder {
         enable 'Plack::Middleware::MangleEnv', %{$block->input};
-        enable 'Plack::Middleware::ReverseProxy';
+        enable 'ReverseProxy', headers => [qw(
+            HTTP_X_FORWARDED_PROTO
+            HTTP_X_FORWARDED_FOR
+            HTTP_X_FORWARDED_SCRIPT_NAME
+            HTTP_X_FORWARDED_PATH_INFO
+        )];
         sub {
             my $req = Plack::Request->new(shift);
             if ( $block->address ) {
@@ -58,9 +63,9 @@ __END__
 === with https
 --- input
 x-forwarded-https: on
---- secure: 1
---- base: https://example.com:80/
---- uri:  https://example.com:80/?foo=bar
+--- secure: 0
+--- base: http://example.com/
+--- uri:  http://example.com/?foo=bar
 
 === without https
 --- input
@@ -90,24 +95,11 @@ x-forwarded-for: 192.168.3.2
 --- base: http://example.com/
 --- uri:  http://example.com/?foo=bar
 
-=== with HTTP_X_FORWARDED_HOST
+=== with ignored HTTP_X_FORWARDED_HOST
 --- input
 x-forwarded-host: 192.168.1.2:5235
---- base: http://192.168.1.2:5235/
---- uri:  http://192.168.1.2:5235/?foo=bar
-
-=== default port with HTTP_X_FORWARDED_HOST
---- input
-x-forwarded-host: 192.168.1.2
---- base: http://192.168.1.2/
---- uri:  http://192.168.1.2/?foo=bar
-
-=== default https port with HTTP_X_FORWARDED_HOST
---- input
-x-forwarded-https: on
-x-forwarded-host: 192.168.1.2
---- base: https://192.168.1.2/
---- uri:  https://192.168.1.2/?foo=bar
+--- base: http://example.com/
+--- uri:  http://example.com/?foo=bar
 
 === default port with HOST
 --- input
@@ -122,41 +114,28 @@ https: ON
 --- base: https://192.168.1.2/
 --- uri:  https://192.168.1.2/?foo=bar
 
-=== with HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_PORT
+=== with ignored HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_PORT
 --- input
 x-forwarded-host: 192.168.1.5
 x-forwarded-port: 1984
---- base: http://192.168.1.5:1984/
---- uri:  http://192.168.1.5:1984/?foo=bar
-=== with multiple HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_FOR
---- input
-x-forwarded-host: outmost.proxy.example.com, middle.proxy.example.com
-x-forwarded-for: 1.2.3.4, 192.168.1.6
-host: 192.168.1.7:5000
---- address: 192.168.1.6
---- base: http://middle.proxy.example.com/
---- uri:  http://middle.proxy.example.com/?foo=bar
-=== normal plackup status
---- input
-host: 127.0.0.1:5000
---- base: http://127.0.0.1:5000/
---- uri:  http://127.0.0.1:5000/?foo=bar
+--- base: http://example.com/
+--- uri:  http://example.com/?foo=bar
 
-=== HTTP_X_FORWARDED_PORT to secure port
+=== ignored HTTP_X_FORWARDED_PORT to secure port
 --- input
 x-forwarded-host: 192.168.1.2
 x-forwarded-port: 443
---- secure: 1
+--- secure: 0
 
 === with ignored HTTP_X_FORWARDED_SCRIPT_NAME
 --- input
 x-forwarded-script-name: /foo
---- base: http://example.com/
---- uri:  http://example.com/?foo=bar
+--- base: http://example.com/foo
+--- uri:  http://example.com/foo/?foo=bar
 
 === with ignored HTTP_X_FORWARDED_PATH_INFO
 --- input
 x-forwarded-script-name: /foo
---- base: http://example.com/
---- uri:  http://example.com/?foo=bar
+--- base: http://example.com/foo
+--- uri:  http://example.com/foo/?foo=bar
 

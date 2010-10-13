@@ -67,6 +67,12 @@ sub call {
         }
     }
 
+    $env->{SCRIPT_NAME} = $env->{HTTP_X_FORWARDED_SCRIPT_NAME}
+        if $allowed->{HTTP_X_FORWARDED_SCRIPT_NAME} && $env->{HTTP_X_FORWARDED_SCRIPT_NAME};
+
+    $env->{PATH_INFO} = $env->{HTTP_X_FORWARDED_PATH_INFO}
+        if $allowed->{HTTP_X_FORWARDED_PATH_INFO} && $env->{HTTP_X_FORWARDED_PATH_INFO};
+
     $self->app->($env);
 }
 
