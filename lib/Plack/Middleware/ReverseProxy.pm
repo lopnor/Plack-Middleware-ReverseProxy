@@ -4,32 +4,48 @@ use strict;
 use warnings;
 use 5.008_001;
 use parent qw(Plack::Middleware);
+use Plack::Util::Accessor qw(headers);
 our $VERSION = '0.07';
+
+sub new {
+    my $self = shift->SUPER::new(@_);
+    $self->headers({ map { $_ => 1 } @{ $self->headers || [qw(
+        HTTP_X_FORWARDED_HTTPS
+        HTTP_X_FORWARDED_PROTO
+        HTTP_X_FORWARDED_FOR
+        HTTP_X_FORWARDED_HOST
+        HTTP_X_FORWARDED_PORT
+        HTTTP_HOST
+    )] } });
+    return $self;
+}
 
 sub call {
     my $self = shift;
     my $env = shift;
+    my $allowed = $self->headers;
 
     # in apache httpd.conf (RequestHeader set X-Forwarded-HTTPS %{HTTPS}s)
     $env->{HTTPS} = $env->{'HTTP_X_FORWARDED_HTTPS'}
-        if $env->{'HTTP_X_FORWARDED_HTTPS'};
-    $env->{HTTPS} = 'ON' if $env->{'HTTP_X_FORWARDED_PROTO'};    # Pound
+        if $allowed->{HTTP_X_FORWARDED_HTTPS} && $env->{HTTP_X_FORWARDED_HTTPS};
+    $env->{HTTPS} = 'ON'
+        if $allowed->{HTTP_X_FORWARDED_PROTO} && $env->{HTTP_X_FORWARDED_PROTO}; # Pound
     $env->{'psgi.url_scheme'}  = 'https' if $env->{HTTPS} && uc $env->{HTTPS} eq 'ON';
     my $default_port = $env->{'psgi.url_scheme'} eq 'https' ? 443 : 80;
 
     # If we are running as a backend server, the user will always appear
     # as 127.0.0.1. Select the most recent upstream IP (last in the list)
-    if ( $env->{'HTTP_X_FORWARDED_FOR'} ) {
+    if ( $allowed->{HTTP_X_FORWARDED_FOR} && $env->{HTTP_X_FORWARDED_FOR} ) {
         my ( $ip, ) = $env->{HTTP_X_FORWARDED_FOR} =~ /([^,\s]+)$/;
         $env->{REMOTE_ADDR} = $ip;
     }
 
-    if ( $env->{HTTP_X_FORWARDED_HOST} ) {
+    if ( $allowed->{HTTP_X_FORWARDED_HOST} && $env->{HTTP_X_FORWARDED_HOST} ) {
         my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /([^,\s]+)$/;
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;
-        } elsif ( $env->{HTTP_X_FORWARDED_PORT} ) {
+        } elsif ( $allowed->{HTTP_X_FORWARDED_PORT} && $env->{HTTP_X_FORWARDED_PORT} ) {
             # in apache httpd.conf (RequestHeader set X-Forwarded-Port 8443)
             $env->{SERVER_PORT} = $env->{HTTP_X_FORWARDED_PORT};
             $host .= ":$env->{SERVER_PORT}";
@@ -40,7 +56,7 @@ sub call {
         }
         $env->{HTTP_HOST} = $host;
 
-    } elsif ( $env->{HTTP_HOST} ) {
+    } elsif ( $allowed->{HTTP_HOST} && $env->{HTTP_HOST} ) {
         my $host = $env->{HTTP_HOST};
         if ($host =~ /^(.+):(\d+)$/ ) {
 #            $env->{HTTP_HOST}   = $1;
