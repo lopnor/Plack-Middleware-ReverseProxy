@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 31;
+plan tests => 37;
 
 use Plack::Builder;
 use Plack::Test;
@@ -146,4 +146,22 @@ host: 127.0.0.1:5000
 --- input
 x-forwarded-host: 192.168.1.2
 x-forwarded-port: 443
+--- secure: 1
+
+=== HTTP_X_FORWARDED_PORT to secure port (apache2)
+--- input
+x-forwarded-server: proxy.example.com
+x-forwarded-host: proxy.example.com:8443
+x-forwarded-https: on
+x-forwarded-port: 8443
+--- base: https://proxy.example.com:8443/
+--- uri:  https://proxy.example.com:8443/?foo=bar
+--- secure: 1
+
+=== with HTTP_X_FORWARDED_SERVER including 443 port (apache1)
+--- input
+x-forwarded-server: proxy.example.com:443
+x-forwarded-host: proxy.example.com
+--- base: https://proxy.example.com/
+--- uri: https://proxy.example.com/?foo=bar
 --- secure: 1
