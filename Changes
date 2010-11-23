@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.08    Tue Nov 23 18:20:00 2010
+        - Compatibility with Apache 1.x frontend
+
 0.07    Sat Aug 28 09:40:00 2010
         - Fix dependencies
 
