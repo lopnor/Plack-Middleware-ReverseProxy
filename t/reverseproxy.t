@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Base;
 use lib 't/lib';
-plan tests => 37;
+plan tests => 39;
 
 use Plack::Builder;
 use Plack::Test;
@@ -82,6 +82,13 @@ x-forwarded-proto: https
 --- secure: 1
 --- base: https://example.com:80/
 --- uri:  https://example.com:80/?foo=bar
+
+=== http with HTTP_X_FORWARDED_PROTO
+--- input
+x-forwarded-proto: http
+--- secure: 0
+--- base: http://example.com/
+--- uri:  http://example.com/?foo=bar
 
 === with HTTP_X_FORWARDED_FOR
 --- input
