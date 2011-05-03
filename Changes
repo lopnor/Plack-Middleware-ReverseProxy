@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.09    Tue May 03 20:02:00 2011
+        - fix for x-forwarded-proto: http (by fujiwara)
+
 0.08    Tue Nov 23 18:20:00 2010
         - Compatibility with Apache 1.x frontend
 
