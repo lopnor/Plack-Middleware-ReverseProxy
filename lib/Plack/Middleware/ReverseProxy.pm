@@ -13,7 +13,8 @@ sub call {
     # in apache2 httpd.conf (RequestHeader set X-Forwarded-HTTPS %{HTTPS}s)
     $env->{HTTPS} = $env->{'HTTP_X_FORWARDED_HTTPS'}
         if $env->{'HTTP_X_FORWARDED_HTTPS'};
-    $env->{HTTPS} = 'ON' if $env->{'HTTP_X_FORWARDED_PROTO'};    # Pound
+    $env->{HTTPS} = 'ON'
+        if $env->{'HTTP_X_FORWARDED_PROTO'} && $env->{'HTTP_X_FORWARDED_PROTO'} eq 'https';    # Pound
     $env->{'psgi.url_scheme'}  = 'https' if $env->{HTTPS} && uc $env->{HTTPS} eq 'ON';
     my $default_port = $env->{'psgi.url_scheme'} eq 'https' ? 443 : 80;
 
