@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.10    Fri Aug 26 00:30:00 2011
+        - fix dependency error (RT:70437 by bobtfish)
+
 0.09    Tue May 03 20:02:00 2011
         - fix for x-forwarded-proto: http (by fujiwara)
 

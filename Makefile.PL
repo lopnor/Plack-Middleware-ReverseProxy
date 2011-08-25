@@ -6,12 +6,12 @@ all_from 'lib/Plack/Middleware/ReverseProxy.pm';
 requires 'parent';
 requires 'Plack::Middleware';
 requires 'Plack::Request';
+requires 'YAML';
 
 tests 't/*.t';
 author_tests 'xt';
 
 build_requires 'Test::More';
-build_requires 'YAML';
 use_test_base;
 auto_include;
 auto_set_repository;
