@@ -12,7 +12,6 @@ tests 't/*.t';
 author_tests 'xt';
 
 build_requires 'Test::More';
-use_test_base;
-auto_include;
+test_requires 'Test::Base';
 auto_set_repository;
 WriteAll;
