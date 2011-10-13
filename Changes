@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.11    Thu Oct 13 11:30:00 2011
+        - test_requires 'Test::Base' instead of use_test_base (by tokuhirom)
+
 0.10    Fri Aug 26 00:30:00 2011
         - fix dependency error (RT:70437 by bobtfish)
 
