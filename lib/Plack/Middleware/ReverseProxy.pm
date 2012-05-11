@@ -10,12 +10,23 @@ sub call {
     my $self = shift;
     my $env = shift;
 
+    my $orig_https = $env->{HTTPS};
     # in apache2 httpd.conf (RequestHeader set X-Forwarded-HTTPS %{HTTPS}s)
     $env->{HTTPS} = $env->{'HTTP_X_FORWARDED_HTTPS'}
         if $env->{'HTTP_X_FORWARDED_HTTPS'};
     $env->{HTTPS} = 'ON'
         if $env->{'HTTP_X_FORWARDED_PROTO'} && $env->{'HTTP_X_FORWARDED_PROTO'} eq 'https';    # Pound
-    $env->{'psgi.url_scheme'}  = 'https' if $env->{HTTPS} && uc $env->{HTTPS} eq 'ON';
+    if ($env->{HTTPS} && uc $env->{HTTPS} eq 'ON') {
+        # the original url was http, and the host should default to port 80,
+        # so we need to make that explicit if we are changing the protocol to
+        # https, which has a different default port
+        if ($env->{'psgi.url_scheme'} ne 'https'
+         && (!$orig_https || uc $orig_https ne 'ON')
+         && $env->{HTTP_HOST} && $env->{HTTP_HOST} !~ /:/) {
+            $env->{HTTP_HOST} .= ':80';
+        }
+        $env->{'psgi.url_scheme'} = 'https';
+    }
     my $default_port = $env->{'psgi.url_scheme'} eq 'https' ? 443 : 80;
 
 
