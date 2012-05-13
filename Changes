@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.12    Sun May 13 09:30:58 EEST 2012
+        - Fixed the default HTTP port detection in case if it was https and use :80 (doy)
+
 0.11    Thu Oct 13 11:30:00 2011
         - test_requires 'Test::Base' instead of use_test_base (by tokuhirom)
 
