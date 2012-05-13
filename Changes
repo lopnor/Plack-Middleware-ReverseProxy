@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.13    Mon May 14 02:30:13 EEST 2012
+        - Reverted the fix in 0.12, instead fixing the test to not check port number
+
 0.12    Sun May 13 09:30:58 EEST 2012
         - Fixed the default HTTP port detection in case if it was https and use :80 (doy)
 
