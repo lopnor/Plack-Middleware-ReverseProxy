@@ -59,8 +59,8 @@ __END__
 --- input
 x-forwarded-https: on
 --- secure: 1
---- base: https://example.com:80/
---- uri:  https://example.com:80/?foo=bar
+--- base: https://example.com/
+--- uri:  https://example.com/?foo=bar
 
 === without https
 --- input
@@ -80,8 +80,8 @@ dummy: 1
 --- input
 x-forwarded-proto: https
 --- secure: 1
---- base: https://example.com:80/
---- uri:  https://example.com:80/?foo=bar
+--- base: https://example.com/
+--- uri:  https://example.com/?foo=bar
 
 === http with HTTP_X_FORWARDED_PROTO
 --- input
