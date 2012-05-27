@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+0.14    Sat May 26 20:19:23 PDT 2012
+        - Fixed Plack dependency
+
 0.13    Mon May 14 02:30:13 EEST 2012
         - Reverted the fix in 0.12, instead fixing the test to not check port number
 
