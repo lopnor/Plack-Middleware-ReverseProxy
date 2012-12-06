@@ -6,12 +6,10 @@ requires 'parent';
 requires 'Plack', 0.9988;
 requires 'Plack::Middleware';
 requires 'Plack::Request';
-requires 'YAML';
 
 tests 't/*.t';
 author_tests 'xt';
 
-build_requires 'Test::More';
-test_requires 'Test::Base';
+test_requires 'Test::More';
 auto_set_repository;
 WriteAll;
