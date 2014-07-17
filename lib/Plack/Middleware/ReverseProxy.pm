@@ -26,6 +26,11 @@ sub call {
         $env->{REMOTE_ADDR} = $ip;
     }
 
+    # Save the original port, so that servers can make local
+    # subrequests to themselves.
+
+    $env->{HTTP_X_LOCAL_PORT} = $env->{SERVER_PORT};
+
     if ( $env->{HTTP_X_FORWARDED_HOST} ) {
 
         # in apache1 ServerName example.com:443
@@ -79,7 +84,7 @@ Plack::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
 =head1 SYNOPSIS
 
   builder {
-      enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 
+      enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
           "Plack::Middleware::ReverseProxy";
       $app;
   };
@@ -106,7 +111,7 @@ Tatsuhiko Miyagawa
 
 =head1 SEE ALSO
 
-L<HTTP::Engine::Middleware::ReverseProxy> 
+L<HTTP::Engine::Middleware::ReverseProxy>
 
 L<Plack>
 
