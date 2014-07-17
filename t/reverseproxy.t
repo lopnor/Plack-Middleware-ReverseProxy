@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use lib 't/lib';
-use Test::More tests => 39;
+use Test::More tests => 56;
 
 use Plack::Builder;
 use Plack::Test;
@@ -33,6 +33,7 @@ sub run {
                     is( $req->$url->as_string, $block->{$url}, $tag . " of $url" );
                 }
             }
+            is( $req->env->{HTTP_X_LOCAL_PORT}, $block->{port} // 80, "HTTP_X_LOCAL_PORT" );
             [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
         }
     };
@@ -129,11 +130,13 @@ host: 192.168.1.7:5000},
     address => '192.168.1.6',
     base    => 'http://middle.proxy.example.com/',
     uri     => 'http://middle.proxy.example.com/?foo=bar',
+    port    => 5000,
 },
 'normal plackup status' => {
     input => q{host: 127.0.0.1:5000},
     base  => 'http://127.0.0.1:5000/',
     uri   => 'http://127.0.0.1:5000/?foo=bar',
+    port    => 5000,
 },
 'HTTP_X_FORWARDED_PORT to secure port' => {
     input  => q{x-forwarded-host: 192.168.1.2
