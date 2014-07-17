@@ -1,5 +1,7 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+        - Set HTTP_X_LOCAL_PORT (by rrwo)
+
 0.15    Mon Jan  7 15:59:54 PST 2013
         - Cut down dependencies for tests (kazeburo)
 
@@ -37,7 +39,7 @@ Revision history for Perl extension Plack::Middleware::ReverseProxy
 
 0.04    Wed Jan 13 16:53:20 2010
 
-        - Tell the environment the request is secure if it was forwarded for a 
+        - Tell the environment the request is secure if it was forwarded for a
         secure port.(rafl)
 
 0.03    Tue Dec 22 17:05:00 2009
