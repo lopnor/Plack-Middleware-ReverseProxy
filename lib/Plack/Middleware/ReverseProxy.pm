@@ -63,6 +63,8 @@ sub call {
             $env->{HTTP_HOST}   = $1;
             $env->{SERVER_PORT} = $default_port;
         }
+    } elsif ( $eng->{SERVER_PORT} != $default_port ) {
+        $env->{SERVER_PORT} = $default_port;
     }
 
     $self->app->($env);
