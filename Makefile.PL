@@ -1,3 +1,4 @@
+use lib '.';
 use inc::Module::Install;
 name 'Plack-Middleware-ReverseProxy';
 all_from 'lib/Plack/Middleware/ReverseProxy.pm';
