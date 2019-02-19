@@ -8,3 +8,11 @@ inc
 pm_to_blib
 MANIFEST.bak
 Makefile.old
+/Plack-Middleware-ReverseProxy-*
+/.build
+/_build_params
+/Build
+/Build.bat
+!Build/
+!META.json
+!LICENSE

@@ -1,5 +1,7 @@
 Revision history for Perl extension Plack::Middleware::ReverseProxy
 
+{{$NEXT}}
+
 0.15    Mon Jan  7 15:59:54 PST 2013
         - Cut down dependencies for tests (kazeburo)
 
