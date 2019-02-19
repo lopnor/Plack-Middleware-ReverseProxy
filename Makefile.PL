@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Supports app to run as a reverse proxy backend",
-  "AUTHOR" => "This module is originally written by Kazuhiro Osawa as L<HTTP::Engine::Middleware::ReverseProxy> for L<HTTP::Engine>.",
+  "AUTHOR" => "Tatsuhiko Miyagawa",
   "BUILD_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.59",
     "Test::More" => 0

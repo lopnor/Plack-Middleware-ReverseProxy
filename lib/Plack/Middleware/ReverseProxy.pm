@@ -94,6 +94,10 @@ using 'enable_if' directive in your app.psgi.
 
 This software is licensed under the same terms as Perl itself.
 
+=head1 COPYRIGHT
+
+Copyright 2009-2019 Tatsuhiko Miyagawa
+
 =head1 AUTHOR
 
 This module is originally written by Kazuhiro Osawa as L<HTTP::Engine::Middleware::ReverseProxy> for L<HTTP::Engine>.

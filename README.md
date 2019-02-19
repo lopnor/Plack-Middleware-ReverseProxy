@@ -20,6 +20,10 @@ using 'enable\_if' directive in your app.psgi.
 
 This software is licensed under the same terms as Perl itself.
 
+# COPYRIGHT
+
+Copyright 2009-2019 Tatsuhiko Miyagawa
+
 # AUTHOR
 
 This module is originally written by Kazuhiro Osawa as [HTTP::Engine::Middleware::ReverseProxy](https://metacpan.org/pod/HTTP::Engine::Middleware::ReverseProxy) for [HTTP::Engine](https://metacpan.org/pod/HTTP::Engine).
