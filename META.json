@@ -63,7 +63,7 @@
          "web" : "https://github.com/lopnor/Plack-Middleware-ReverseProxy"
       }
    },
-   "version" : "0.15",
+   "version" : "0.16",
    "x_contributors" : [
       "danjou <danjou@guido.soffritto.org>",
       "Florian Ragwitz <rafl@debian.org>",
