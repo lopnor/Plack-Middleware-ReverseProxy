@@ -84,7 +84,7 @@ my @test = (
     uri    => 'http://example.com/?foo=bar',
 },
 'with HTTP_X_FORWARDED_FOR' => {
-    input   => q{x-forwarded-for: 192.168.3.2},
+    input   => q{x-forwarded-for: 192.168.3.2 },
     address => '192.168.3.2',
     base    => 'http://example.com/',
     uri     => 'http://example.com/?foo=bar',
