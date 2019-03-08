@@ -22,7 +22,7 @@ sub call {
     # If we are running as a backend server, the user will always appear
     # as 127.0.0.1. Select the most recent upstream IP (last in the list)
     if ( $env->{'HTTP_X_FORWARDED_FOR'} ) {
-        my ( $ip, ) = $env->{HTTP_X_FORWARDED_FOR} =~ /([^,\s]+)$/;
+        my ( $ip ) = $env->{HTTP_X_FORWARDED_FOR} =~ /^\s*([^,\s]+)/;
         $env->{REMOTE_ADDR} = $ip;
     }
 
@@ -39,7 +39,7 @@ sub call {
             $env->{HTTP_HOST} = $host;
         }
 
-        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /([^,\s]+)$/;
+        my ( $host ) = $env->{HTTP_X_FORWARDED_HOST} =~ /^\s*([^,\s]+)/;
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;

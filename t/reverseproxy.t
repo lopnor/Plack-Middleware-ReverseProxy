@@ -123,12 +123,12 @@ x-forwarded-port: 1984},
     uri   => 'http://192.168.1.5:1984/?foo=bar',
 },
 'with multiple HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_FOR' => {
-    input   => q{x-forwarded-host: outmost.proxy.example.com, middle.proxy.example.com
+    input   => q{x-forwarded-host: host.example.com, outmost.proxy.example.com, middle.proxy.example.com
 x-forwarded-for: 1.2.3.4, 192.168.1.6
 host: 192.168.1.7:5000},
-    address => '192.168.1.6',
-    base    => 'http://middle.proxy.example.com/',
-    uri     => 'http://middle.proxy.example.com/?foo=bar',
+    address => '1.2.3.4',
+    base    => 'http://host.example.com/',
+    uri     => 'http://host.example.com/?foo=bar',
 },
 'normal plackup status' => {
     input => q{host: 127.0.0.1:5000},
