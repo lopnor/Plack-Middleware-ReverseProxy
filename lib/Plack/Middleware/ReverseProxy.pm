@@ -22,7 +22,7 @@ sub call {
     # If we are running as a backend server, the user will always appear
     # as 127.0.0.1. Select the most recent upstream IP (last in the list)
     if ( $env->{'HTTP_X_FORWARDED_FOR'} ) {
-        my ( $ip, ) = $env->{HTTP_X_FORWARDED_FOR} =~ /([^,\s]+)$/;
+        my ( $ip, ) = $env->{HTTP_X_FORWARDED_FOR} =~ /([^,\s]+)\s*$/;
         $env->{REMOTE_ADDR} = $ip;
     }
 
@@ -30,7 +30,7 @@ sub call {
 
         # in apache1 ServerName example.com:443
         if ( $env->{HTTP_X_FORWARDED_SERVER} ) {
-            my ( $host, ) = $env->{HTTP_X_FORWARDED_SERVER} =~ /([^,\s]+)$/;
+            my ( $host, ) = $env->{HTTP_X_FORWARDED_SERVER} =~ /([^,\s]+)\s*$/;
             if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
                 $env->{SERVER_PORT} = $2;
@@ -39,7 +39,7 @@ sub call {
             $env->{HTTP_HOST} = $host;
         }
 
-        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /([^,\s]+)$/;
+        my ( $host, ) = $env->{HTTP_X_FORWARDED_HOST} =~ /([^,\s]+)\s*$/;
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;
@@ -79,7 +79,7 @@ Plack::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
 =head1 SYNOPSIS
 
   builder {
-      enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 
+      enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
           "Plack::Middleware::ReverseProxy";
       $app;
   };
@@ -110,7 +110,7 @@ Tatsuhiko Miyagawa
 
 =head1 SEE ALSO
 
-L<HTTP::Engine::Middleware::ReverseProxy> 
+L<HTTP::Engine::Middleware::ReverseProxy>
 
 L<Plack>
 
