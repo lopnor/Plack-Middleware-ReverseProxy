@@ -43,7 +43,11 @@ sub call {
         if ( $host =~ /^(.+):(\d+)$/ ) {
 #            $host = $1;
             $env->{SERVER_PORT} = $2;
-        } elsif ( $env->{HTTP_X_FORWARDED_PORT} ) {
+        } elsif ( $env->{HTTP_X_FORWARDED_PORT} &&
+                  $env->{HTTP_X_FORWARDED_PORT} =~ /\d+/ && # Some servers send a bogus port, or a string
+                  $env->{HTTP_X_FORWARDED_PORT} > 1 &&
+                  $env->{HTTP_X_FORWARDED_PORT} < 65536
+            ) {
             # in apache2 httpd.conf (RequestHeader set X-Forwarded-Port 8443)
             $env->{SERVER_PORT} = $env->{HTTP_X_FORWARDED_PORT};
             $host .= ":$env->{SERVER_PORT}";

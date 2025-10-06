@@ -52,7 +52,7 @@ sub run {
     test_psgi %test;
 }
 
-my @test = (
+my %test = (
 'with https' => {
     input  => q{x-forwarded-https: on},
     secure => 1,
@@ -158,9 +158,8 @@ x-forwarded-host: proxy.example.com},
 }
 );
 
-for ( my $i=0; $i < @test; $i = $i+2 ) {
-    my $tag = $test[$i];
-    my $test = $test[$i+1];
-    run($tag,$test);
+foreach my $tag (keys %test) {
+    my $test = $test{$tag};
+    run($tag, $test);
 }
 
