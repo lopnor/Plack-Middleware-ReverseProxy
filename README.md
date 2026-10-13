@@ -26,7 +26,7 @@ Copyright 2009-2019 Tatsuhiko Miyagawa
 
 # AUTHOR
 
-This module is originally written by Kazuhiro Osawa as [HTTP::Engine::Middleware::ReverseProxy](https://metacpan.org/pod/HTTP::Engine::Middleware::ReverseProxy) for [HTTP::Engine](https://metacpan.org/pod/HTTP::Engine).
+This module is originally written by Kazuhiro Osawa as [HTTP::Engine::Middleware::ReverseProxy](https://metacpan.org/pod/HTTP%3A%3AEngine%3A%3AMiddleware%3A%3AReverseProxy) for [HTTP::Engine](https://metacpan.org/pod/HTTP%3A%3AEngine).
 
 Nobuo Danjou
 
@@ -36,10 +36,10 @@ Tatsuhiko Miyagawa
 
 # SEE ALSO
 
-[HTTP::Engine::Middleware::ReverseProxy](https://metacpan.org/pod/HTTP::Engine::Middleware::ReverseProxy) 
+[HTTP::Engine::Middleware::ReverseProxy](https://metacpan.org/pod/HTTP%3A%3AEngine%3A%3AMiddleware%3A%3AReverseProxy) 
 
 [Plack](https://metacpan.org/pod/Plack)
 
-[Plack::Middleware](https://metacpan.org/pod/Plack::Middleware)
+[Plack::Middleware](https://metacpan.org/pod/Plack%3A%3AMiddleware)
 
-[Plack::Middleware::Conditional](https://metacpan.org/pod/Plack::Middleware::Conditional)
+[Plack::Middleware::Conditional](https://metacpan.org/pod/Plack%3A%3AMiddleware%3A%3AConditional)
