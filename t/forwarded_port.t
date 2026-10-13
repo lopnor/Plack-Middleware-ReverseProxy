@@ -24,8 +24,9 @@ is $env->{HTTP_HOST}, 'example.com:8080';
 for my $port ('(', '.*.*.*1', '80abc', "80\n", '80; rm', 'example.com',
               "\x{0663}", "\x{FF18}\x{FF10}") { # non-ASCII digits
     run_with_port($port);
-    is $env->{SERVER_PORT}, 80, "non-numeric X-Forwarded-Port '$port' is ignored";
-    is $env->{HTTP_HOST}, 'example.com', "non-numeric X-Forwarded-Port '$port' is not added to Host";
+    (my $name = $port) =~ s/([^\x20-\x7e])/sprintf '\\x{%X}', ord $1/ge;
+    is $env->{SERVER_PORT}, 80, "non-numeric X-Forwarded-Port '$name' is ignored";
+    is $env->{HTTP_HOST}, 'example.com', "non-numeric X-Forwarded-Port '$name' is not added to Host";
 }
 
 # non-ASCII digits in the port part of Host headers are not a port
